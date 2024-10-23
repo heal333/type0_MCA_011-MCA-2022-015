@@ -1,6 +1,10 @@
-import { memo } from "react";
+import { memo, useContext, useEffect } from "react";
+import { inputContext } from "../../utils/InputContext";
+import { useSelector } from "react-redux";
 
 const Keyboard = (props) => {
+    const currentKey = useSelector((store) => store.input.currentKey);
+    console.log(currentKey.key);
     const top = [
         "`",
         "1",
@@ -33,7 +37,7 @@ const Keyboard = (props) => {
         "]",
         "\\",
     ];
-    const asdf = [
+    let asdf = [
         "CapsLock",
         "a",
         "s",
@@ -72,23 +76,45 @@ const Keyboard = (props) => {
         "Ctrl2",
         "Fn2",
     ];
-    console.log("keyboard");
 
-    const blink = (key) => {
+    const keyDown = (key) => {
         document.querySelector(`.${key}`).style.backgroundColor =
             "var(--visitedLetter)";
-        const timer = setTimeout(() => {
-            document.querySelector(`.${key}`).style.backgroundColor =
-                "var(--backgroundColor)";
-            clearTimeout(timer);
-        }, 150);
     };
 
-    document.addEventListener("keypress", (e) => {
-        if (/^[A-Za-z]+$/.test(e.key)) {
-            blink(e.key);
+    const keyUp = (key) => {
+        document.querySelector(`.${key}`).style.backgroundColor =
+            "var(--backgroundColor)";
+    };
+
+    if (/^[A-Za-z]+$/.test(currentKey.key)) {
+        console.log(currentKey.type);
+        if (currentKey.type === "keydown") {
+            if (currentKey.key === "Shift") {
+                keyDown("Shift1");
+                for (let i = 1; i < asdf.length; i++) {
+                    asdf[i] = asdf;
+                }
+            } else {
+                keyDown(currentKey.key);
+            }
+        } else if (currentKey.type === "keyup") {
+            if (currentKey.key === "Shift") {
+                keyUp("Shift1");
+            } else {
+                keyUp(currentKey.key);
+            }
         }
-    });
+    }
+
+    // useEffect(() => {
+
+    //     if (currentKey.key === "") {
+    //         document.querySelector(".key").style.backgroundColor = "red";
+    //         console.log("sdfsdf");
+    //     }
+    // });
+
     return (
         <div
             className="keyboard"
@@ -147,4 +173,4 @@ const Keyboard = (props) => {
     );
 };
 
-export default memo(Keyboard);
+export default Keyboard;

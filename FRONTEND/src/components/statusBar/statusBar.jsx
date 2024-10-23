@@ -3,6 +3,7 @@ import Accuracy from "./Accuracy";
 import LocalHighScore from "./localHighScore";
 import { useState } from "react";
 import Keyboard from "../keyboard/Keyboard";
+import InputContextProvider from "../../utils/InputContext";
 function StatusBar(props) {
     const [showKb, setShowKb] = useState(true);
     const toggleKbHandler = () => {
